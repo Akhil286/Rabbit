@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sanjana's Birthday Countdown</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #7c4dff;
+            --primary-light: #b47cff;
+            --primary-dark: #3f1dcb;
+            --secondary-color: #ff8a65;
+            --dark-color: #1a1a2e;
+            --light-color: #f5f5f7;
+            --text-dark: #333333;
+            --text-light: #ffffff;
+            --accent-color: #ff5252;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: var(--text-dark);
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Floating balloons */
+        .balloon {
+            position: absolute;
+            width: 40px;
+            height: 55px;
+            border-radius: 50%;
+            z-index: 0;
+            animation: float 15s infinite ease-in-out;
+            opacity: 0.7;
+            box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .balloon::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            width: 2px;
+            height: 15px;
+            background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.3));
+            transform: translateX(-50%);
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        
+        /* Floating hearts */
+        .floating-heart {
+            position: absolute;
+            color: #ff6b6b;
+            font-size: 20px;
+            opacity: 0;
+            z-index: 0;
+            animation: float-heart 15s infinite linear;
+        }
+        
+        @keyframes float-heart {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .birthday-container {
+            width: 100%;
+            max-width: 1200px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .birthday-card {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+            background: white;
+            transition: all 0.5s ease;
+            border: none;
+            position: relative;
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            padding: 30px;
+            text-align: center;
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 60%);
+            transform: rotate(30deg);
+        }
+        
+        .birthday-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.75rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: white;
+            letter-spacing: -0.5px;
+            position: relative;
+        }
+        
+        .birthday-title.highlight {
+            animation: pulse 1.5s infinite;
+            color: #fff !important;
+            text-shadow: 0 0 15px rgba(255, 235, 59, 0.8);
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        
+        .card-header p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            color: white;
+            margin-bottom: 0;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+        
+        .profile-container {
+            position: relative;
+            display: inline-block;
+            margin: 25px 0;
+        }
+        
+        .profile-image {
+            width: 220px;
+            height: 220px;
+            object-fit: cover;
+            border: 6px solid white;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border-radius: 50%;
+            transition: all 0.4s ease;
+        }
+        
+        .profile-image:hover {
+            transform: scale(1.03);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .birthday-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--accent-color) 100%);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.3);
+            z-index: 10;
+            animation: pulse 1.5s infinite;
+            letter-spacing: 0.5px;
+        }
+        
+        .countdown-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.25rem;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+        
+        .countdown-timer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .time-unit {
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-color) 100%);
+            color: white;
+            width: 130px;
+            padding: 20px 15px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(124, 77, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .time-unit::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 60%);
+            transform: rotate(30deg);
+        }
+        
+        .time-unit:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(124, 77, 255, 0.3);
+        }
+        
+        .time-value {
+            font-size: 2.75rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .time-label {
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            opacity: 0.9;
+            font-weight: 500;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .birthday-info {
+            font-size: 1.1rem;
+            color: #555;
+            margin-top: 25px;
+            background: var(--light-color);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .text-purple {
+            color: var(--primary-color) !important;
+        }
+        
+        .birthday-message {
+            background-color: var(--light-color);
+            border-left: 4px solid var(--primary-color);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .anticipation-message {
+            background-color: var(--light-color);
+            border-radius: 12px;
+            margin-top: 25px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-top: 3px solid var(--primary-color);
+        }
+        
+        .card-footer {
+            background-color: #f8f9fa !important;
+            padding: 20px !important;
+        }
+        
+        .gif-container {
+            text-align: center;
+            margin: 25px 0;
+        }
+        
+        .animated-gif {
+            max-width: 220px;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+            transition: all 0.3s ease;
+        }
+        
+        .animated-gif:hover {
+            transform: scale(1.03);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .gif-caption {
+            margin-top: 15px;
+            font-style: italic;
+            color: #666;
+            font-size: 1rem;
+        }
+        
+        /* Music player */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background: white;
+            border-radius: 50px;
+            padding: 10px 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .music-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .music-toggle:hover {
+            transform: scale(1.1);
+            background: var(--primary-dark);
+        }
+        
+        .music-info {
+            font-size: 0.9rem;
+            max-width: 0;
+            overflow: hidden;
+            transition: max-width 0.5s ease;
+            white-space: nowrap;
+        }
+        
+        .music-player:hover .music-info {
+            max-width: 200px;
+        }
+        
+        /* Progress bar */
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-light), var(--primary-color));
+            border-radius: 4px;
+            width: 0%;
+            transition: width 1s ease;
+        }
+        
+        /* Photo gallery */
+        .photo-gallery {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            overflow-x: auto;
+            padding: 10px 5px;
+            scrollbar-width: thin;
+        }
+        
+        .gallery-item {
+            min-width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        /* Modal for gallery */
+        .gallery-modal .modal-content {
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .gallery-modal img {
+            width: 100%;
+            border-radius: 0;
+        }
+
+        /* Confetti canvas */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Birthday celebration styles */
+        .birthday-mode .birthday-card {
+            box-shadow: 0 0 40px rgba(124, 77, 255, 0.4);
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 20px rgba(124, 77, 255, 0.4); }
+            to { box-shadow: 0 0 40px rgba(124, 77, 255, 0.6), 0 0 70px rgba(255, 138, 101, 0.3); }
+        }
+
+        .birthday-mode .card-header {
+            background: linear-gradient(135deg, #ff5252 0%, #ff8a65 100%);
+        }
+
+        /* Decorative elements */
+        .decorative-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(124, 77, 255, 0.1) 0%, rgba(255, 138, 101, 0.1) 100%);
+            z-index: -1;
+        }
+        
+        .circle-1 {
+            width: 200px;
+            height: 200px;
+            top: -100px;
+            right: -100px;
+        }
+        
+        .circle-2 {
+            width: 150px;
+            height: 150px;
+            bottom: -75px;
+            left: -75px;
+        }
+        
+        /* Candle animation */
+        .candle {
+            position: absolute;
+            width: 20px;
+            height: 40px;
+            background: linear-gradient(to right, #ffa502, #ff7b00, #ffa502);
+            border-radius: 10px 10px 0 0;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px #ff9a00;
+            z-index: 5;
+        }
+        
+        .flame {
+            position: absolute;
+            width: 15px;
+            height: 30px;
+            background: linear-gradient(to bottom, #ffff00, #ff8c00, #ff4500);
+            border-radius: 50% 50% 20% 20%;
+            top: -55px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: flicker 1.5s infinite alternate;
+            box-shadow: 0 0 20px #ff8c00, 0 0 40px #ff4500;
+        }
+        
+        @keyframes flicker {
+            0%, 100% { 
+                height: 30px;
+                opacity: 1;
+            }
+            50% { 
+                height: 35px;
+                opacity: 0.8;
+            }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .birthday-title {
+                font-size: 2.5rem;
+            }
+            
+            .countdown-section h2 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .birthday-title {
+                font-size: 2.25rem;
+            }
+            
+            .profile-image {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .countdown-section h2 {
+                font-size: 1.9rem;
+            }
+            
+            .time-unit {
+                width: 110px;
+                padding: 18px 12px;
+            }
+            
+            .time-value {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .birthday-title {
+                font-size: 2rem;
+            }
+            
+            .card-header p {
+                font-size: 1.1rem;
+            }
+            
+            .profile-image {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .countdown-section h2 {
+                font-size: 1.75rem;
+            }
+            
+            .countdown-timer {
+                gap: 15px;
+            }
+            
+            .time-unit {
+                width: 95px;
+                padding: 15px 10px;
+            }
+            
+            .time-value {
+                font-size: 2.25rem;
+            }
+            
+            .time-label {
+                font-size: 0.85rem;
+            }
+            
+            .birthday-info {
+                font-size: 1rem;
+            }
+            
+            .animated-gif {
+                max-width: 180px;
+            }
+            
+            .music-player {
+                bottom: 10px;
+                right: 10px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .birthday-title {
+                font-size: 1.8rem;
+            }
+            
+            .profile-image {
+                width: 160px;
+                height: 160px;
+            }
+            
+            .countdown-section h2 {
+                font-size: 1.6rem;
+            }
+            
+            .time-unit {
+                width: 80px;
+                padding: 12px 8px;
+            }
+            
+            .time-value {
+                font-size: 2rem;
+            }
+            
+            .time-label {
+                font-size: 0.8rem;
+            }
+            
+            .birthday-info {
+                font-size: 0.95rem;
+                padding: 15px;
+            }
+            
+            .animated-gif {
+                max-width: 150px;
+            }
+            
+            .card-header {
+                padding: 25px 20px;
+            }
+            
+            .music-info {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Confetti canvas -->
+    <canvas id="confetti-canvas"></canvas>
+    
+    <!-- Floating balloons -->
+    <div class="balloon" style="left: 5%; top: 10%; background: linear-gradient(to bottom, #ff5252, #ff8a65); animation-delay: 0s;"></div>
+    <div class="balloon" style="left: 15%; top: 15%; background: linear-gradient(to bottom, #7c4dff, #b47cff); animation-delay: 1s;"></div>
+    <div class="balloon" style="right: 5%; top: 12%; background: linear-gradient(to bottom, #ffeb3b, #ffc107); animation-delay: 2s;"></div>
+    <div class="balloon" style="right: 15%; top: 18%; background: linear-gradient(to bottom, #4caf50, #8bc34a); animation-delay: 3s;"></div>
+    
+    <!-- Floating hearts -->
+    <div class="floating-heart" style="left: 10%; animation-delay: 0s;"><i class="fas fa-heart"></i></div>
+    <div class="floating-heart" style="left: 20%; animation-delay: 2s;"><i class="fas fa-heart"></i></div>
+    <div class="floating-heart" style="left: 30%; animation-delay: 4s;"><i class="fas fa-heart"></i></div>
+    <div class="floating-heart" style="left: 40%; animation-delay: 6s;"><i class="fas fa-heart"></i></div>
+    <div class="floating-heart" style="left: 50%; animation-delay: 8s;"><i class="fas fa-heart"></i></div>
+    <div class="floating-heart" style="left: 60%; animation-delay: 10s;"><i class="fas fa-heart"></i></div>
+    <div class="floating-heart" style="left: 70%; animation-delay: 12s;"><i class="fas fa-heart"></i></div>
+    <div class="floating-heart" style="left: 80%; animation-delay: 14s;"><i class="fas fa-heart"></i></div>
+    
+    <!-- Decorative elements -->
+    <div class="decorative-circle circle-1"></div>
+    <div class="decorative-circle circle-2"></div>
+    
+    <!-- Music player -->
+    <div class="music-player">
+        <div class="music-toggle" id="music-toggle">
+            <i class="fas fa-music"></i>
+        </div>
+        <div class="music-info">
+            Birthday Song - Playing
+        </div>
+        <audio id="birthday-audio" loop>
+            <source src="happy-birthday-314197.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+    
+    <div class="birthday-container">
+        <div class="birthday-card card shadow-lg">
+            <!-- Birthday candle -->
+            <div class="candle"></div>
+            <div class="flame"></div>
+            
+            <div class="card-header text-white text-center">
+                <h1 class="birthday-title mb-3">
+                    Sanjana's Birthday Countdown
+                </h1>
+                <p class="mb-0">
+                    Mark your calendars for this special celebration
+                </p>
+            </div>
+            
+            <div class="card-body p-0">
+                <div class="row g-0 align-items-center justify-content-center">
+                    <div class="image-section col-lg-5 col-md-6 text-center p-4 p-md-5">
+                        <div class="position-relative d-inline-block">
+                            <img
+                                id="profile-image"
+                                src="IMG-20250328-WA0085.jpg"
+                                alt="Sanjana"
+                                class="profile-image img-fluid"
+                            />
+                            <div class="birthday-badge">
+                                Coming Soon!
+                            </div>
+                        </div>
+                        
+                        <!-- Progress bar -->
+                        <div class="progress-container mt-4">
+                            <div class="progress-bar" id="birthday-progress"></div>
+                        </div>
+                        
+                        <!-- Animated GIF Section -->
+                        <div class="gif-container">
+                            <img id="birthday-gif" src="https://media.giphy.com/media/3o7aD2vOBq0rC2gQic/giphy.gif" alt="Celebration GIF" class="animated-gif img-fluid">
+                            <p id="gif-caption" class="gif-caption">Can't wait to celebrate with you! 🐇</p>
+                        </div>
+                    </div>
+                    
+                    <div class="countdown-section col-lg-7 col-md-6 p-4 p-md-5 d-flex flex-column justify-content-center">
+                        <h2 class="text-center mb-4">
+                            Counting Down to Your Special Day
+                        </h2>
+                        
+                        <div class="countdown-timer d-flex justify-content-between flex-wrap gap-3 mx-auto w-100">
+                            <div class="time-unit text-center rounded shadow-sm">
+                                <span id="days" class="time-value d-block">--</span>
+                                <span class="time-label d-block text-uppercase mt-1">Days</span>
+                            </div>
+                            <div class="time-unit text-center rounded shadow-sm">
+                                <span id="hours" class="time-value d-block">--</span>
+                                <span class="time-label d-block text-uppercase mt-1">Hours</span>
+                            </div>
+                            <div class="time-unit text-center rounded shadow-sm">
+                                <span id="minutes" class="time-value d-block">--</span>
+                                <span class="time-label d-block text-uppercase mt-1">Minutes</span>
+                            </div>
+                            <div class="time-unit text-center rounded shadow-sm">
+                                <span id="seconds" class="time-value d-block">--</span>
+                                <span class="time-label d-block text-uppercase mt-1">Seconds</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Photo gallery -->
+                        <div class="photo-gallery mt-4">
+                            <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal" data-img="https://picsum.photos/id/100/800/600">
+                                <img src="https://picsum.photos/id/100/100/100" alt="Memory 1">
+                            </div>
+                            <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal" data-img="https://picsum.photos/id/101/800/600">
+                                <img src="https://picsum.photos/id/101/100/100" alt="Memory 2">
+                            </div>
+                            <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal" data-img="https://picsum.photos/id/102/800/600">
+                                <img src="https://picsum.photos/id/102/100/100" alt="Memory 3">
+                            </div>
+                            <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal" data-img="https://picsum.photos/id/103/800/600">
+                                <img src="https://picsum.photos/id/103/100/100" alt="Memory 4">
+                            </div>
+                            <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal" data-img="https://picsum.photos/id/104/800/600">
+                                <img src="https://picsum.photos/id/104/100/100" alt="Memory 5">
+                            </div>
+                        </div>
+                        
+                        <div class="birthday-info text-center mt-4 mt-md-5">
+                            <p class="mb-2">
+                                <strong>Birthday Details:</strong>
+                            </p>
+                            <p class="mb-0">
+                                <i class="fas fa-calendar-alt me-2"></i> <strong>Date:</strong> September 17th<br>
+                                <i class="fas fa-clock me-2"></i> <strong>Time:</strong> 4:35 AM
+                            </p>
+                        </div>
+
+                        <div id="anticipation-message" class="anticipation-message mt-4 text-center">
+                            <h4 class="text-purple mb-2">Something Special Is Coming!</h4>
+                            <p class="mb-0">Get ready for a day of celebration and joy!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-footer text-center">
+                <p class="mb-0 text-muted">Created with love for Sanjana's special day ❤️</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Gallery Modal -->
+    <div class="modal fade gallery-modal" id="galleryModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <img id="modal-image" src="" alt="Memory" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Set the birthday date (September 17th at 4:35 AM)
+        const birthdayMonth = 8; // JavaScript months are 0-indexed (0=January, 8=September)
+        const birthdayDay = 17;
+        const birthdayHour = 12;
+        const birthdayMinute = 0;
+        
+        // Confetti variables
+        const confettiCanvas = document.getElementById('confetti-canvas');
+        const ctx = confettiCanvas.getContext('2d');
+        confettiCanvas.width = window.innerWidth;
+        confettiCanvas.height = window.innerHeight;
+        
+        let confettiParticles = [];
+        let confettiActive = false;
+        
+        // Music player variables
+        const audio = document.getElementById('birthday-audio');
+        const musicToggle = document.getElementById('music-toggle');
+        let isPlaying = false;
+        
+        // Initialize music player
+        musicToggle.addEventListener('click', function() {
+            if (isPlaying) {
+                audio.pause();
+                musicToggle.innerHTML = '<i class="fas fa-music"></i>';
+                document.querySelector('.music-info').textContent = 'Birthday Song - Paused';
+            } else {
+                audio.play().catch(e => {
+                    console.log('Audio play failed:', e);
+                    // This usually happens due to browser autoplay policies
+                    document.querySelector('.music-info').textContent = 'Click to play music';
+                });
+                musicToggle.innerHTML = '<i class="fas fa-pause"></i>';
+                document.querySelector('.music-info').textContent = 'Birthday Song - Playing';
+            }
+            isPlaying = !isPlaying;
+        });
+        
+        // Confetti particle class
+        class ConfettiParticle {
+            constructor() {
+                this.x = Math.random() * confettiCanvas.width;
+                this.y = Math.random() * confettiCanvas.height - confettiCanvas.height;
+                this.size = Math.random() * 10 + 5;
+                this.speed = Math.random() * 3 + 2;
+                this.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                this.angle = Math.random() * 360;
+                this.spin = Math.random() * 10 - 5;
+            }
+            
+            update() {
+                this.y += this.speed;
+                this.x += Math.sin(this.angle * Math.PI / 180);
+                this.angle += this.spin;
+                
+                if (this.y > confettiCanvas.height) {
+                    this.y = 0 - this.size;
+                    this.x = Math.random() * confettiCanvas.width;
+                }
+            }
+            
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        
+        // Initialize confetti
+        function initConfetti() {
+            confettiParticles = [];
+            for (let i = 0; i < 150; i++) {
+                confettiParticles.push(new ConfettiParticle());
+            }
+            confettiActive = true;
+            animateConfetti();
+        }
+        
+        // Animate confetti
+        function animateConfetti() {
+            if (!confettiActive) return;
+            
+            ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+            
+            for (let i = 0; i < confettiParticles.length; i++) {
+                confettiParticles[i].update();
+                confettiParticles[i].draw();
+            }
+            
+            requestAnimationFrame(animateConfetti);
+        }
+        
+        // Stop confetti
+        function stopConfetti() {
+            confettiActive = false;
+        }
+        
+        // Update progress bar
+        function updateProgressBar(days) {
+            const progressBar = document.getElementById('birthday-progress');
+            // Calculate percentage until birthday (assuming 365 days in a year)
+            const daysInYear = 365;
+            const progressPercentage = ((daysInYear - days) / daysInYear) * 100;
+            progressBar.style.width = `${progressPercentage}%`;
+        }
+        
+        // Update countdown
+        function updateCountdown() {
+            const now = new Date();
+            let year = now.getFullYear();
+            
+            // Create the next birthday date
+            let nextBirthday = new Date(year, birthdayMonth, birthdayDay, birthdayHour, birthdayMinute, 0);
+            
+            // If the birthday has already passed this year, set it for next year
+            if (nextBirthday < now) {
+                nextBirthday.setFullYear(year + 1);
+            }
+            
+            // Calculate the difference in time
+            const diff = nextBirthday - now;
+            
+            // Calculate days, hours, minutes, seconds
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            // Update the countdown display
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            
+            // Update progress bar
+            updateProgressBar(days);
+            
+            // Check if it's the birthday (within a 24-hour window)
+            const isBirthdayToday = isBirthday(now);
+            const isBirthdayTomorrow = isBirthday(new Date(now.getTime() + 24 * 60 * 60 * 1000));
+            
+            // Get GIF elements
+            const birthdayGif = document.getElementById('birthday-gif');
+            const gifCaption = document.getElementById('gif-caption');
+            
+            if (isBirthdayToday || isBirthdayTomorrow) {
+                // Update all content for birthday
+                document.querySelector('.birthday-title').textContent = "🎉 Happy Birthday, Sanjana! 🎉";
+                document.querySelector('.birthday-title').classList.add('highlight');
+                document.querySelector('.card-header p').textContent = "Wishing you a day filled with joy and wonderful moments!";
+                document.querySelector('.countdown-section h2').textContent = "The Celebration Has Begun!";
+                document.querySelector('.birthday-badge').textContent = "Today!";
+                
+                // Change the GIF to a birthday celebration GIF
+                birthdayGif.src = "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExOGoyc3pienhrc2F0ZGo1bmg2Z2twdG83MnN3cWw5NTJ5aWhvZnZlaSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l1BgT1rs5YTOzvMHu/giphy.gif";
+                gifCaption.textContent = "Happy Birthday! 🎂🎈";
+                
+                // Remove the anticipation message
+                const anticipationMsg = document.getElementById('anticipation-message');
+                if (anticipationMsg) {
+                    anticipationMsg.remove();
+                }
+                
+                // Add birthday message if not already present
+                if (!document.querySelector('.birthday-message')) {
+                    const birthdayMsg = document.createElement('div');
+                    birthdayMsg.className = 'birthday-message mt-4 p-3 rounded text-center';
+                    birthdayMsg.innerHTML = '<h3 class="text-primary">Celebration Time!</h3><p class="mb-0">Hope your day goes special as you are!</p>';
+                    document.querySelector('.image-section').appendChild(birthdayMsg);
+                }
+                
+                // Add birthday mode styling
+                document.body.classList.add('birthday-mode');
+                
+                // Start confetti if not already active
+                if (!confettiActive) {
+                    initConfetti();
+                }
+                
+                // Auto-play music on birthday
+                if (!isPlaying) {
+                    audio.play().catch(e => {
+                        console.log('Audio autoplay failed:', e);
+                    });
+                    musicToggle.innerHTML = '<i class="fas fa-pause"></i>';
+                    document.querySelector('.music-info').textContent = 'Birthday Song - Playing';
+                    isPlaying = true;
+                }
+                
+                // If it's the birthday day, show zeros in the countdown
+                if (isBirthdayToday) {
+                    document.getElementById('days').textContent = '0';
+                    document.getElementById('hours').textContent = '00';
+                    document.getElementById('minutes').textContent = '00';
+                    document.getElementById('seconds').textContent = '00';
+                }
+            } else {
+                // Before birthday - show countdown GIF
+                birthdayGif.src = "https://media.giphy.com/media/3o7aD2vOBq0rC2gQic/giphy.gif";
+                gifCaption.textContent = "Can't wait to celebrate with you! 🐇";
+                
+                // If it's not the birthday, make sure confetti is stopped
+                if (confettiActive) {
+                    stopConfetti();
+                    document.body.classList.remove('birthday-mode');
+                }
+            }
+        }
+        
+        // Check if the given date is the birthday
+        function isBirthday(date) {
+            return date.getMonth() === birthdayMonth && 
+                   date.getDate() === birthdayDay;
+        }
+        
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
+        });
+        
+        // Gallery modal functionality
+        const galleryModal = document.getElementById('galleryModal');
+        if (galleryModal) {
+            galleryModal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                const imageUrl = button.getAttribute('data-img');
+                const modalImage = document.getElementById('modal-image');
+                modalImage.src = imageUrl;
+            });
+        }
+        
+        // Initial update
+        updateCountdown();
+        
+        // Update countdown every second
+        setInterval(updateCountdown, 1000);
+        
+        // Add more floating hearts continuously
+        setInterval(function() {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.innerHTML = '<i class="fas fa-heart"></i>';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDelay = Math.random() * 15 + 's';
+            document.body.appendChild(heart);
+            
+            // Remove hearts after animation completes
+            setTimeout(function() {
+                heart.remove();
+            }, 15000);
+        }, 2000);
+    </script>
+</body>
+</html>
