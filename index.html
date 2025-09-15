@@ -22,7 +22,8 @@
         
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+             background: linear-gradient(to right, #f0f0f0, #ffe0e0);
+            transition: background 2s ease;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -34,32 +35,24 @@
         }
         
         /* Floating balloons */
-        .balloon {
-            position: absolute;
-            width: 40px;
-            height: 55px;
-            border-radius: 50%;
-            z-index: 0;
-            animation: float 15s infinite ease-in-out;
-            opacity: 0.7;
-            box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .balloon::after {
-            content: "";
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            width: 2px;
-            height: 15px;
-            background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.3));
-            transform: translateX(-50%);
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
-        }
+        /* 🎈 Balloon Styles */
+.balloon {
+    position: absolute;
+    bottom: -150px;
+    width: 50px;
+    height: 70px;
+    background-color: pink;
+    border-radius: 50% 50% 50% 50%;
+    animation: float 8s ease-in infinite;
+    opacity: 0.8;
+}
+
+@keyframes float {
+    0% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-400px) rotate(45deg); }
+    100% { transform: translateY(0) rotate(0deg); }
+}
+
         
         /* Floating hearts */
         .floating-heart {
@@ -92,8 +85,7 @@
         .birthday-card {
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
-            background: white;
+            background: transparent;
             transition: all 0.5s ease;
             border: none;
             position: relative;
@@ -157,8 +149,8 @@
         }
         
         .profile-image {
-            width: 220px;
-            height: 220px;
+            width: 320px;
+            height: 320px;
             object-fit: cover;
             border: 6px solid white;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
@@ -324,6 +316,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            display: none;
         }
         
         .music-toggle {
@@ -501,6 +494,27 @@
             }
         }
         
+        /* Play music button for birthday */
+        .play-music-btn {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--accent-color) 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.3);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .play-music-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(244, 67, 54, 0.4);
+        }
+        
         /* Responsive adjustments */
         @media (max-width: 1200px) {
             .birthday-title {
@@ -652,21 +666,19 @@
     <div class="floating-heart" style="left: 80%; animation-delay: 14s;"><i class="fas fa-heart"></i></div>
     
     <!-- Decorative elements -->
-    <div class="decorative-circle circle-1"></div>
-    <div class="decorative-circle circle-2"></div>
+    <!-- <div class="decorative-circle circle-1"></div>
+    <div class="decorative-circle circle-2"></div> -->
     
     <!-- Music player -->
-    <div class="music-player">
-        <div class="music-toggle" id="music-toggle">
-            <i class="fas fa-music"></i>
-        </div>
-        <div class="music-info">
-            Birthday Song - Playing
-        </div>
-        <audio id="birthday-audio" loop>
-            <source src="happy-birthday-314197.mp3" type="audio/mpeg">
-        </audio>
+   <div class="music-player" id="music-player">
+    <div class="music-toggle" id="music-toggle">
+        <i class="fas fa-music"></i>
     </div>
+    <audio id="birthday-audio" loop>
+        <source src="happy-birthday-314197.mp3" type="audio/mpeg">
+    </audio>
+</div>
+
     
     <div class="birthday-container">
         <div class="birthday-card card shadow-lg">
@@ -689,7 +701,7 @@
                         <div class="position-relative d-inline-block">
                             <img
                                 id="profile-image"
-                                src="IMG-20250328-WA0085.jpg"
+                                src="WhatsApp Image 2025-09-15 at 18.45.34_7fa0f96a.jpg"
                                 alt="Sanjana"
                                 class="profile-image img-fluid"
                             />
@@ -701,6 +713,12 @@
                         <!-- Progress bar -->
                         <div class="progress-container mt-4">
                             <div class="progress-bar" id="birthday-progress"></div>
+                        </div>
+                        
+                        <div id="play-music-container" class="d-none">
+                            <!-- <button id="play-music-btn" class="play-music-btn">
+                                <i class="fas fa-play-circle"></i> Play Birthday Music
+                            </button> -->
                         </div>
                         
                         <!-- Animated GIF Section -->
@@ -736,21 +754,26 @@
                         
                         <!-- Photo gallery -->
                         <div class="photo-gallery mt-4">
-                            <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal" data-img="https://picsum.photos/id/100/800/600">
-                                <img src="https://picsum.photos/id/100/100/100" alt="Memory 1">
-                            </div>
-                            <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal" data-img="https://picsum.photos/id/101/800/600">
-                                <img src="https://picsum.photos/id/101/100/100" alt="Memory 2">
-                            </div>
-                            <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal" data-img="https://picsum.photos/id/102/800/600">
-                                <img src="https://picsum.photos/id/102/100/100" alt="Memory 3">
-                            </div>
-                            <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal" data-img="https://picsum.photos/id/103/800/600">
-                                <img src="https://picsum.photos/id/103/100/100" alt="Memory 4">
-                            </div>
-                            <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal" data-img="https://picsum.photos/id/104/800/600">
-                                <img src="https://picsum.photos/id/104/100/100" alt="Memory 5">
-                            </div>
+                            <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal" data-img="WhatsApp Image 2025-09-15 at 18.45.36_80fd6670.jpg">
+  <img src="WhatsApp Image 2025-09-15 at 18.45.36_80fd6670.jpg" alt="Memory 1">
+</div>
+
+                            <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal" data-img="WhatsApp Image 2025-09-15 at 18.45.34_69cc49a8.jpg">
+  <img src="WhatsApp Image 2025-09-15 at 18.45.34_69cc49a8.jpg" alt="Memory 2">
+</div>
+
+<div class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal" data-img="IMG-20250328-WA0085.jpg">
+  <img src="IMG-20250328-WA0085.jpg" alt="Memory 3">
+</div>
+
+<div class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal" data-img="WhatsApp Image 2025-09-15 at 18.45.39_c6f6eda5.jpg">
+  <img src="WhatsApp Image 2025-09-15 at 18.45.39_c6f6eda5.jpg" alt="Memory 4">
+</div>
+
+<div class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal" data-img="WhatsApp Image 2025-09-15 at 18.47.01_2aac68a3.jpg">
+  <img src="WhatsApp Image 2025-09-15 at 18.47.01_2aac68a3.jpg" alt="Memory 5">
+</div>
+
                         </div>
                         
                         <div class="birthday-info text-center mt-4 mt-md-5">
@@ -778,274 +801,286 @@
     </div>
     
     <!-- Gallery Modal -->
-    <div class="modal fade gallery-modal" id="galleryModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header border-0">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body p-0">
-                    <img id="modal-image" src="" alt="Memory" class="img-fluid">
-                </div>
-            </div>
-        </div>
+    <!-- Gallery Modal -->
+<div class="modal fade gallery-modal" id="galleryModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content bg-transparent border-0 shadow-none">
+      <img id="galleryModalImg" src="" alt="Gallery Preview" class="img-fluid rounded">
     </div>
+  </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Set the birthday date (September 17th at 4:35 AM)
-        const birthdayMonth = 8; // JavaScript months are 0-indexed (0=January, 8=September)
-        const birthdayDay = 17;
-        const birthdayHour = 12;
-        const birthdayMinute = 0;
-        
-        // Confetti variables
-        const confettiCanvas = document.getElementById('confetti-canvas');
-        const ctx = confettiCanvas.getContext('2d');
-        confettiCanvas.width = window.innerWidth;
-        confettiCanvas.height = window.innerHeight;
-        
-        let confettiParticles = [];
-        let confettiActive = false;
-        
-        // Music player variables
-        const audio = document.getElementById('birthday-audio');
-        const musicToggle = document.getElementById('music-toggle');
-        let isPlaying = false;
-        
-        // Initialize music player
+
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+   <script>
+    // Set the birthday date (September 17th at 12:00 AM)
+    const birthdayMonth = 8; // JS months are 0-indexed (0=January, 8=September)
+    const birthdayDay = 16;
+    const birthdayHour = 0;
+    const birthdayMinute = 0;
+    
+    // Confetti variables
+    const confettiCanvas = document.getElementById('confetti-canvas');
+    const ctx = confettiCanvas.getContext('2d');
+    confettiCanvas.width = window.innerWidth;
+    confettiCanvas.height = window.innerHeight;
+    
+    let confettiParticles = [];
+    let confettiActive = false;
+    
+    // Music player variables
+    const audio = document.getElementById('birthday-audio');
+    const musicToggle = document.getElementById('music-toggle');
+    const musicPlayer = document.getElementById('music-player');
+    const playMusicBtn = document.getElementById('play-music-btn');
+    const playMusicContainer = document.getElementById('play-music-container');
+    let isPlaying = false;
+
+    // ✅ Force autoplay muted
+    audio.muted = true;
+    audio.loop = true;
+    audio.play().catch(err => {
+        console.log("Autoplay blocked until interaction:", err);
+    });
+    
+    // Initialize music player toggle
+    if (musicToggle) {
         musicToggle.addEventListener('click', function() {
-            if (isPlaying) {
-                audio.pause();
-                musicToggle.innerHTML = '<i class="fas fa-music"></i>';
-                document.querySelector('.music-info').textContent = 'Birthday Song - Paused';
-            } else {
-                audio.play().catch(e => {
-                    console.log('Audio play failed:', e);
-                    // This usually happens due to browser autoplay policies
-                    document.querySelector('.music-info').textContent = 'Click to play music';
-                });
-                musicToggle.innerHTML = '<i class="fas fa-pause"></i>';
+            toggleMusic();
+        });
+    }
+    
+    // Play music button event listener
+    if (playMusicBtn) {
+        playMusicBtn.addEventListener('click', function() {
+            toggleMusic();
+            playMusicContainer.classList.add('d-none'); // Hide after click
+        });
+    }
+    
+    function toggleMusic() {
+        if (isPlaying) {
+            audio.pause();
+            musicToggle.innerHTML = '<i class="fas fa-music"></i>';
+            document.querySelector('.music-info').textContent = 'Birthday Song - Paused';
+        } else {
+            audio.play().then(() => {
                 document.querySelector('.music-info').textContent = 'Birthday Song - Playing';
-            }
-            isPlaying = !isPlaying;
-        });
-        
-        // Confetti particle class
-        class ConfettiParticle {
-            constructor() {
+            }).catch(e => {
+                console.log('Audio play failed:', e);
+                document.querySelector('.music-info').textContent = 'Click to play music';
+            });
+            musicToggle.innerHTML = '<i class="fas fa-pause"></i>';
+        }
+        isPlaying = !isPlaying;
+    }
+    
+    // Confetti particle class
+    class ConfettiParticle {
+        constructor() {
+            this.x = Math.random() * confettiCanvas.width;
+            this.y = Math.random() * confettiCanvas.height - confettiCanvas.height;
+            this.size = Math.random() * 10 + 5;
+            this.speed = Math.random() * 3 + 2;
+            this.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+            this.angle = Math.random() * 360;
+            this.spin = Math.random() * 10 - 5;
+        }
+        update() {
+            this.y += this.speed;
+            this.x += Math.sin(this.angle * Math.PI / 180);
+            this.angle += this.spin;
+            if (this.y > confettiCanvas.height) {
+                this.y = 0 - this.size;
                 this.x = Math.random() * confettiCanvas.width;
-                this.y = Math.random() * confettiCanvas.height - confettiCanvas.height;
-                this.size = Math.random() * 10 + 5;
-                this.speed = Math.random() * 3 + 2;
-                this.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
-                this.angle = Math.random() * 360;
-                this.spin = Math.random() * 10 - 5;
-            }
-            
-            update() {
-                this.y += this.speed;
-                this.x += Math.sin(this.angle * Math.PI / 180);
-                this.angle += this.spin;
-                
-                if (this.y > confettiCanvas.height) {
-                    this.y = 0 - this.size;
-                    this.x = Math.random() * confettiCanvas.width;
-                }
-            }
-            
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
             }
         }
+        draw() {
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+    
+    function initConfetti() {
+        confettiParticles = [];
+        for (let i = 0; i < 150; i++) {
+            confettiParticles.push(new ConfettiParticle());
+        }
+        confettiActive = true;
+        animateConfetti();
+    }
+    
+    function animateConfetti() {
+        if (!confettiActive) return;
+        ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+        for (let i = 0; i < confettiParticles.length; i++) {
+            confettiParticles[i].update();
+            confettiParticles[i].draw();
+        }
+        requestAnimationFrame(animateConfetti);
+    }
+    
+    function stopConfetti() {
+        confettiActive = false;
+    }
+    
+    // Progress bar
+    function updateProgressBar(days) {
+        const progressBar = document.getElementById('birthday-progress');
+        const daysInYear = 365;
+        const progressPercentage = ((daysInYear - days) / daysInYear) * 100;
+        progressBar.style.width = `${progressPercentage}%`;
+    }
+    
+    // Countdown update
+    function updateCountdown() {
+    const now = new Date();
+    let year = now.getFullYear();
+    let nextBirthday = new Date(year, birthdayMonth, birthdayDay, birthdayHour, birthdayMinute, 0);
+    if (nextBirthday < now) nextBirthday.setFullYear(year + 1);
+    
+    const diff = nextBirthday - now;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    
+    document.getElementById('days').textContent = days;
+    document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+    document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+    document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+    updateProgressBar(days);
+    
+    const birthdayStart = new Date(year, birthdayMonth, birthdayDay, 0, 0, 0);
+    const birthdayEnd = new Date(year, birthdayMonth, birthdayDay + 1, 0, 0, 0);
+    
+    if (now >= birthdayStart && now < birthdayEnd) {
+        // Celebration mode (existing code unchanged)
+        document.querySelector('.birthday-title').textContent = "🎉 Happy Birthday, Sanjana! 🎉";
+        document.querySelector('.birthday-title').classList.add('highlight');
+        document.querySelector('.card-header p').textContent = "Wishing you a day filled with joy and wonderful moments!";
+        document.querySelector('.countdown-section h2').textContent = "The Celebration Has Begun!";
+        document.querySelector('.birthday-badge').textContent = "Today!";
         
-        // Initialize confetti
-        function initConfetti() {
-            confettiParticles = [];
-            for (let i = 0; i < 150; i++) {
-                confettiParticles.push(new ConfettiParticle());
-            }
-            confettiActive = true;
-            animateConfetti();
+        const birthdayGif = document.getElementById('birthday-gif');
+        const gifCaption = document.getElementById('gif-caption');
+        birthdayGif.src = "ac0ae6668b8bda1e3b0e5398157a9bab.gif";
+        gifCaption.textContent = "Happy Birthday! 🎂🎈";
+        
+        const anticipationMsg = document.getElementById('anticipation-message');
+        if (anticipationMsg) anticipationMsg.remove();
+        
+        if (!document.querySelector('.birthday-message')) {
+            const birthdayMsg = document.createElement('div');
+            birthdayMsg.className = 'birthday-message mt-4 p-3 rounded text-center';
+            birthdayMsg.innerHTML = '<h3 class="text-primary">Celebration Time!</h3><p class="mb-0">Hope your day goes special as you are!</p>';
+            document.querySelector('.image-section').appendChild(birthdayMsg);
         }
         
-        // Animate confetti
-        function animateConfetti() {
-            if (!confettiActive) return;
-            
-            ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-            
-            for (let i = 0; i < confettiParticles.length; i++) {
-                confettiParticles[i].update();
-                confettiParticles[i].draw();
-            }
-            
-            requestAnimationFrame(animateConfetti);
+        playMusicContainer.classList.remove('d-none');
+        document.body.classList.add('birthday-mode');
+        if (!confettiActive) initConfetti();
+        musicPlayer.style.display = 'flex';
+        
+        audio.muted = false;
+        if (audio.paused) {
+            audio.play().catch(err => console.log("Still blocked:", err));
         }
         
-        // Stop confetti
-        function stopConfetti() {
-            confettiActive = false;
+        document.getElementById('days').textContent = '0';
+        document.getElementById('hours').textContent = '00';
+        document.getElementById('minutes').textContent = '00';
+        document.getElementById('seconds').textContent = '00';
+
+        // 🎆 New feature: hourly fireworks
+        if (!window.hourlyFireworksStarted) {
+            window.hourlyFireworksStarted = true;
+            launchHourlyFireworks();
         }
-        
-        // Update progress bar
-        function updateProgressBar(days) {
-            const progressBar = document.getElementById('birthday-progress');
-            // Calculate percentage until birthday (assuming 365 days in a year)
-            const daysInYear = 365;
-            const progressPercentage = ((daysInYear - days) / daysInYear) * 100;
-            progressBar.style.width = `${progressPercentage}%`;
+
+    } else {
+        // Before or after birthday (existing code unchanged)
+        const birthdayGif = document.getElementById('birthday-gif');
+        const gifCaption = document.getElementById('gif-caption');
+        birthdayGif.src = "https://media.giphy.com/media/3o7aD2vOBq0rC2gQic/giphy.gif";
+        gifCaption.textContent = "Can't wait to celebrate with you! 🐇";
+        playMusicContainer.classList.add('d-none');
+        if (confettiActive) {
+            stopConfetti();
+            document.body.classList.remove('birthday-mode');
         }
-        
-        // Update countdown
-        function updateCountdown() {
-            const now = new Date();
-            let year = now.getFullYear();
-            
-            // Create the next birthday date
-            let nextBirthday = new Date(year, birthdayMonth, birthdayDay, birthdayHour, birthdayMinute, 0);
-            
-            // If the birthday has already passed this year, set it for next year
-            if (nextBirthday < now) {
-                nextBirthday.setFullYear(year + 1);
-            }
-            
-            // Calculate the difference in time
-            const diff = nextBirthday - now;
-            
-            // Calculate days, hours, minutes, seconds
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            
-            // Update the countdown display
-            document.getElementById('days').textContent = days;
-            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
-            
-            // Update progress bar
-            updateProgressBar(days);
-            
-            // Check if it's the birthday (within a 24-hour window)
-            const isBirthdayToday = isBirthday(now);
-            const isBirthdayTomorrow = isBirthday(new Date(now.getTime() + 24 * 60 * 60 * 1000));
-            
-            // Get GIF elements
-            const birthdayGif = document.getElementById('birthday-gif');
-            const gifCaption = document.getElementById('gif-caption');
-            
-            if (isBirthdayToday || isBirthdayTomorrow) {
-                // Update all content for birthday
-                document.querySelector('.birthday-title').textContent = "🎉 Happy Birthday, Sanjana! 🎉";
-                document.querySelector('.birthday-title').classList.add('highlight');
-                document.querySelector('.card-header p').textContent = "Wishing you a day filled with joy and wonderful moments!";
-                document.querySelector('.countdown-section h2').textContent = "The Celebration Has Begun!";
-                document.querySelector('.birthday-badge').textContent = "Today!";
-                
-                // Change the GIF to a birthday celebration GIF
-                birthdayGif.src = "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExOGoyc3pienhrc2F0ZGo1bmg2Z2twdG83MnN3cWw5NTJ5aWhvZnZlaSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l1BgT1rs5YTOzvMHu/giphy.gif";
-                gifCaption.textContent = "Happy Birthday! 🎂🎈";
-                
-                // Remove the anticipation message
-                const anticipationMsg = document.getElementById('anticipation-message');
-                if (anticipationMsg) {
-                    anticipationMsg.remove();
-                }
-                
-                // Add birthday message if not already present
-                if (!document.querySelector('.birthday-message')) {
-                    const birthdayMsg = document.createElement('div');
-                    birthdayMsg.className = 'birthday-message mt-4 p-3 rounded text-center';
-                    birthdayMsg.innerHTML = '<h3 class="text-primary">Celebration Time!</h3><p class="mb-0">Hope your day goes special as you are!</p>';
-                    document.querySelector('.image-section').appendChild(birthdayMsg);
-                }
-                
-                // Add birthday mode styling
-                document.body.classList.add('birthday-mode');
-                
-                // Start confetti if not already active
-                if (!confettiActive) {
-                    initConfetti();
-                }
-                
-                // Auto-play music on birthday
-                if (!isPlaying) {
-                    audio.play().catch(e => {
-                        console.log('Audio autoplay failed:', e);
-                    });
-                    musicToggle.innerHTML = '<i class="fas fa-pause"></i>';
-                    document.querySelector('.music-info').textContent = 'Birthday Song - Playing';
-                    isPlaying = true;
-                }
-                
-                // If it's the birthday day, show zeros in the countdown
-                if (isBirthdayToday) {
-                    document.getElementById('days').textContent = '0';
-                    document.getElementById('hours').textContent = '00';
-                    document.getElementById('minutes').textContent = '00';
-                    document.getElementById('seconds').textContent = '00';
-                }
-            } else {
-                // Before birthday - show countdown GIF
-                birthdayGif.src = "https://media.giphy.com/media/3o7aD2vOBq0rC2gQic/giphy.gif";
-                gifCaption.textContent = "Can't wait to celebrate with you! 🐇";
-                
-                // If it's not the birthday, make sure confetti is stopped
-                if (confettiActive) {
-                    stopConfetti();
-                    document.body.classList.remove('birthday-mode');
-                }
-            }
-        }
-        
-        // Check if the given date is the birthday
-        function isBirthday(date) {
-            return date.getMonth() === birthdayMonth && 
-                   date.getDate() === birthdayDay;
-        }
-        
-        // Handle window resize
-        window.addEventListener('resize', function() {
-            confettiCanvas.width = window.innerWidth;
-            confettiCanvas.height = window.innerHeight;
-        });
-        
-        // Gallery modal functionality
-        const galleryModal = document.getElementById('galleryModal');
-        if (galleryModal) {
-            galleryModal.addEventListener('show.bs.modal', function(event) {
-                const button = event.relatedTarget;
-                const imageUrl = button.getAttribute('data-img');
-                const modalImage = document.getElementById('modal-image');
-                modalImage.src = imageUrl;
+        audio.muted = true;
+    }
+}
+
+// Launch fireworks once per hour during birthday
+function launchHourlyFireworks() {
+    const launch = () => {
+        if (typeof confetti !== 'undefined') {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { x: 0.5, y: 0.5 }
             });
         }
-        
-        // Initial update
-        updateCountdown();
-        
-        // Update countdown every second
-        setInterval(updateCountdown, 1000);
-        
-        // Add more floating hearts continuously
-        setInterval(function() {
-            const heart = document.createElement('div');
-            heart.className = 'floating-heart';
-            heart.innerHTML = '<i class="fas fa-heart"></i>';
-            heart.style.left = Math.random() * 100 + '%';
-            heart.style.animationDelay = Math.random() * 15 + 's';
-            document.body.appendChild(heart);
-            
-            // Remove hearts after animation completes
-            setTimeout(function() {
-                heart.remove();
-            }, 15000);
-        }, 2000);
-    </script>
+    };
+    
+    launch(); // initial launch
+    const intervalId = setInterval(() => {
+        const now = new Date();
+        const birthdayStart = new Date(now.getFullYear(), birthdayMonth, birthdayDay, 0, 0, 0);
+        const birthdayEnd = new Date(now.getFullYear(), birthdayMonth, birthdayDay + 1, 0, 0, 0);
+        if (now >= birthdayStart && now < birthdayEnd) {
+            launch();
+        } else {
+            clearInterval(intervalId); // stop after birthday ends
+        }
+    }, 10 * 1000); // every 10 sec
+}
+
+    
+    function isBirthday(date) {
+        return date.getMonth() === birthdayMonth && date.getDate() === birthdayDay;
+    }
+    
+    window.addEventListener('resize', function() {
+        confettiCanvas.width = window.innerWidth;
+        confettiCanvas.height = window.innerHeight;
+    });
+    
+      const galleryItems = document.querySelectorAll(".gallery-item");
+  const galleryModalImg = document.getElementById("galleryModalImg");
+
+  galleryItems.forEach(item => {
+    item.addEventListener("click", () => {
+      const imgSrc = item.getAttribute("data-img"); // Get big image
+      galleryModalImg.src = imgSrc; // Put inside modal
+    });
+  });
+    // Optional: clear when modal closes
+    galleryModal.addEventListener("hidden.bs.modal", () => {
+        galleryModalImg.src = "";
+    });
+    
+    // Initial update + every second refresh
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+    
+    // Floating hearts
+    setInterval(function() {
+        const heart = document.createElement('div');
+        heart.className = 'floating-heart';
+        heart.innerHTML = '<i class="fas fa-heart"></i>';
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.animationDelay = Math.random() * 15 + 's';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 15000);
+    }, 2000);
+</script>
+
 </body>
 </html>
